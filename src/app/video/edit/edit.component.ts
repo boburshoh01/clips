@@ -17,11 +17,15 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges {
   alertMsg = "Please wait! Updating clip."
   @Output() update = new EventEmitter()
 
-  clipID = new FormControl('')
-  title = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3)
-  ])
+  clipID = new FormControl('', { nonNullable: true })
+  title = new FormControl('', {
+    validators: [
+
+      Validators.required,
+      Validators.minLength(3)
+    ],
+    nonNullable: true
+  })
   editForm = new FormGroup({
     title: this.title,
     id: this.clipID
@@ -47,7 +51,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges {
 
     this.inSubmission = false
     this.showAlert = false
-    this.clipID.setValue(this.activeClip.docID ?? null)
+    this.clipID.setValue(this.activeClip.docID ?? '')
     this.title.setValue(this.activeClip.title)
   }
 
@@ -63,7 +67,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges {
 
     try {
       await this.clipService.updateClip(
-        this.clipID.value ?? '', this.title.value ?? ''
+        this.clipID.value, this.title.value
       )
     } catch (e) {
       this.inSubmission = false
@@ -72,7 +76,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges {
       return
     }
 
-    this.activeClip.title = this.title.value ?? ''
+    this.activeClip.title = this.title.value
     this.update.emit(this.activeClip)
 
     this.inSubmission = false

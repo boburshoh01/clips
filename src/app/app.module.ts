@@ -16,7 +16,6 @@ import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
-
 @NgModule({
   declarations: [
     AppComponent,

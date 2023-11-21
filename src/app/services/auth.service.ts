@@ -6,12 +6,9 @@ import { Observable, of } from 'rxjs';
 import { map, delay, filter, switchMap } from 'rxjs';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root'
 })
-
-
 
 export class AuthService {
   private usersCollection: AngularFirestoreCollection<IUser>
@@ -40,24 +37,24 @@ export class AuthService {
     if (!userData.password) {
       throw new Error("Password not provided!")
     }
-    if (typeof userData.email === 'string' && typeof userData.password === 'string') {
 
-      const userCred = await this.auth.createUserWithEmailAndPassword(userData.email, userData.password)
 
-      if (!userCred.user) {
-        throw new Error("User can't be found")
-      }
-      await this.usersCollection.doc(userCred.user.uid).set({
-        name: userData.name,
-        email: userData.email,
-        age: userData.age,
-        phoneNumber: userData.phoneNumber
-      })
+    const userCred = await this.auth.createUserWithEmailAndPassword(userData.email as string, userData.password as string)
 
-      await userCred.user.updateProfile({
-        displayName: userData.name
-      })
+    if (!userCred.user) {
+      throw new Error("User can't be found")
     }
+    await this.usersCollection.doc(userCred.user.uid).set({
+      name: userData.name,
+      email: userData.email,
+      age: userData.age,
+      phoneNumber: userData.phoneNumber
+    })
+
+    await userCred.user.updateProfile({
+      displayName: userData.name
+    })
+
   }
   public async logout($event?: Event) {
     if ($event) {
