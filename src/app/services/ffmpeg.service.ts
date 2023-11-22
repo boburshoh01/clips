@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FFmpeg } from '@ffmpeg/ffmpeg'
-import { log } from 'console';
 
 @Injectable({
   providedIn: 'root'
